@@ -6,7 +6,7 @@
     <title>SEL 植．覺 - 自我覺察之旅</title>
     <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入 Google Fonts: Noto Serif TC -->
+    <!-- 引入 Google Fonts: Noto Serif TC (營造質感) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
@@ -220,13 +220,34 @@
                     userText = "與校園植物的對話...";
                 }
 
+                // 動態判斷字體大小與行高
+                let fontSize = 46;
+                let lineHeight = 65;
+                const textLength = userText.length;
+
+                if (textLength <= 15) {
+                    fontSize = 64;       // 15 字以內超大字體 (例如單句金句)
+                    lineHeight = 85;
+                } else if (textLength <= 30) {
+                    fontSize = 54;       // 15~30 字大字體
+                    lineHeight = 75;
+                } else if (textLength <= 60) {
+                    fontSize = 44;       // 30~60 字標準字體
+                    lineHeight = 62;
+                } else if (textLength <= 100) {
+                    fontSize = 36;       // 60~100 字縮小字體
+                    lineHeight = 52;
+                } else {
+                    fontSize = 30;       // 100 字以上更小字體以容納內容
+                    lineHeight = 44;
+                }
+
                 ctx.fillStyle = '#292524'; // 深灰色字體 stone-800
-                ctx.font = '46px "Noto Serif TC", serif';
+                ctx.font = `${fontSize}px "Noto Serif TC", serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'top';
 
                 const textMaxWidth = CANVAS_WIDTH - (padding * 3);
-                const lineHeight = 65;
                 const textStartX = CANVAS_WIDTH / 2;
                 const textStartY = padding + photoHeight + 70; // 照片下方
 
