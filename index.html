@@ -1,723 +1,250 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>🌿 樹的心語</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+TC:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Noto Serif TC', 'PingFang TC', 'Microsoft JhengHei', serif;
-      min-height: 100vh;
-      background: #eef6ec;
-      color: #2d4a2d;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 15% 15%, rgba(100,160,50,0.13) 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 85%, rgba(50,130,60,0.10) 0%, transparent 55%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .app {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ── Header ── */
-    header {
-      background: linear-gradient(150deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
-      color: #fff;
-      padding: 28px 20px 32px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    header::after {
-      content: '';
-      position: absolute;
-      bottom: -1px; left: 0; right: 0;
-      height: 24px;
-      background: #eef6ec;
-      border-radius: 24px 24px 0 0;
-    }
-
-    .hbg { position: absolute; opacity: .07; font-size: 5rem; }
-    .hbg1 { top: -8px; left: 8px; }
-    .hbg2 { bottom: 12px; right: 12px; font-size: 4rem; }
-
-    header h1 {
-      font-size: 1.65rem;
-      font-weight: 500;
-      letter-spacing: .12em;
-      position: relative;
-    }
-
-    header p {
-      font-size: .82rem;
-      opacity: .88;
-      margin-top: 6px;
-      letter-spacing: .05em;
-      position: relative;
-    }
-
-    .sel-tags {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin-top: 12px;
-      position: relative;
-    }
-
-    .sel-tag {
-      background: rgba(255,255,255,.18);
-      border: 1px solid rgba(255,255,255,.38);
-      padding: 3px 11px;
-      border-radius: 20px;
-      font-size: .7rem;
-      letter-spacing: .06em;
-    }
-
-    /* ── Layout ── */
-    main {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 20px 15px 48px;
-    }
-
-    .card {
-      background: rgba(255,255,255,.93);
-      border-radius: 20px;
-      padding: 22px 18px;
-      margin-bottom: 14px;
-      box-shadow: 0 2px 18px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.03);
-    }
-
-    .step-head {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .badge {
-      width: 28px; height: 28px;
-      background: linear-gradient(135deg, #43a047, #1b5e20);
-      color: #fff;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: .78rem; font-weight: 700;
-      flex-shrink: 0;
-    }
-
-    .step-head h2 {
-      font-size: .95rem;
-      font-weight: 500;
-      color: #2d5a27;
-    }
-
-    /* ── Upload zone ── */
-    #uploadZone {
-      position: relative;
-      border: 2px dashed #a5d6a7;
-      border-radius: 14px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: border-color .25s;
-      background: linear-gradient(180deg, #f1f8e9, #e8f5e9);
-    }
-
-    #uploadZone:hover { border-color: #66bb6a; }
-
-    #uploadZone > input[type="file"] {
-      position: absolute;
-      inset: 0; opacity: 0; cursor: pointer;
-      width: 100%; height: 100%;
-    }
-
-    .upload-ph {
-      padding: 38px 20px;
-      text-align: center;
-    }
-
-    .upload-ph .icon { font-size: 3.6rem; display: block; }
-
-    .upload-ph .main { font-size: 1rem; color: #388e3c; margin: 8px 0 4px; font-weight: 500; }
-
-    .upload-ph .hint { font-size: .8rem; color: #81c784; }
-
-    #photoPreview {
-      width: 100%;
-      display: none;
-      border-radius: 12px;
-    }
-
-    .photo-actions {
-      display: none;
-      margin-top: 10px;
-    }
-
-    .photo-actions.show { display: block; }
-
-    .btn-retake {
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      padding: 10px;
-      background: #f1f8e9;
-      border: 1.5px solid #a5d6a7;
-      border-radius: 10px;
-      color: #388e3c;
-      font-family: inherit;
-      font-size: .85rem;
-      cursor: pointer;
-      transition: background .2s;
-      text-align: center;
-    }
-
-    .btn-retake input[type="file"] {
-      position: absolute;
-      inset: 0; opacity: 0; cursor: pointer;
-      width: 100%; height: 100%;
-    }
-
-    .btn-retake:hover { background: #e8f5e9; }
-
-    /* ── Message ── */
-    #msgInput {
-      width: 100%;
-      min-height: 108px;
-      padding: 14px;
-      border: 1.5px solid #a5d6a7;
-      border-radius: 12px;
-      background: #fafff9;
-      font-family: 'Noto Serif TC', serif;
-      font-size: 1rem;
-      line-height: 1.8;
-      color: #2d4a2d;
-      resize: none;
-      outline: none;
-      transition: border-color .25s;
-    }
-
-    #msgInput:focus { border-color: #4caf50; }
-
-    #msgInput::placeholder { color: #b2d8b2; font-style: italic; }
-
-    .char-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 7px;
-    }
-
-    .char-hint { font-size: .72rem; color: #aacbaa; font-style: italic; }
-    .char-num  { font-size: .72rem; color: #9aab9a; }
-
-    .prompt-sec {
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px dashed #c8e6c9;
-    }
-
-    .prompt-label {
-      font-size: .78rem;
-      color: #7ab87a;
-      margin-bottom: 9px;
-    }
-
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-
-    .chip {
-      padding: 6px 13px;
-      background: #f1f8e9;
-      border: 1px solid #c8e6c9;
-      border-radius: 20px;
-      font-size: .77rem;
-      color: #388e3c;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all .2s;
-      user-select: none;
-    }
-
-    .chip:hover, .chip:active { background: #c8e6c9; border-color: #81c784; }
-
-    /* ── Generate button ── */
-    .btn-gen {
-      width: 100%;
-      padding: 17px;
-      background: linear-gradient(135deg, #43a047, #1b5e20);
-      color: #fff;
-      border: none;
-      border-radius: 14px;
-      font-family: 'Noto Serif TC', inherit;
-      font-size: 1.05rem;
-      font-weight: 500;
-      cursor: pointer;
-      letter-spacing: .06em;
-      transition: all .3s;
-      box-shadow: 0 4px 20px rgba(27,94,32,.28);
-    }
-
-    .btn-gen:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 26px rgba(27,94,32,.38);
-    }
-
-    .btn-gen:active:not(:disabled) { transform: translateY(0); }
-
-    .btn-gen:disabled {
-      background: #b0bec5;
-      box-shadow: none;
-      cursor: not-allowed;
-    }
-
-    /* ── Output ── */
-    #outputSec { display: none; }
-    #outputSec.show { display: block; }
-
-    .out-card {
-      background: rgba(255,255,255,.95);
-      border-radius: 20px;
-      padding: 24px 18px;
-      text-align: center;
-      box-shadow: 0 4px 28px rgba(0,0,0,.1);
-    }
-
-    .out-title {
-      font-size: .85rem;
-      color: #7ab87a;
-      margin-bottom: 16px;
-      letter-spacing: .06em;
-    }
-
-    #polaroidCanvas {
-      max-width: 100%;
-      border-radius: 3px;
-      box-shadow:
-        0 12px 44px rgba(0,0,0,.22),
-        0 3px 10px rgba(0,0,0,.12);
-      display: block;
-      margin: 0 auto;
-    }
-
-    .out-actions {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .btn-dl {
-      padding: 16px;
-      background: linear-gradient(135deg, #f57c00, #e64a19);
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      letter-spacing: .06em;
-      box-shadow: 0 4px 18px rgba(230,74,25,.3);
-      transition: all .3s;
-    }
-
-    .btn-dl:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(230,74,25,.4); }
-
-    .ios-tip {
-      display: none;
-      font-size: .78rem;
-      color: #888;
-      background: #f5f5f5;
-      border-radius: 8px;
-      padding: 9px 12px;
-      line-height: 1.6;
-    }
-
-    .ios-tip.show { display: block; }
-
-    .btn-new {
-      padding: 12px;
-      background: transparent;
-      border: 1.5px solid #a5d6a7;
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: .9rem;
-      color: #388e3c;
-      cursor: pointer;
-      transition: background .2s;
-    }
-
-    .btn-new:hover { background: #f1f8e9; }
-
-    /* ── Footer ── */
-    footer {
-      text-align: center;
-      padding: 0 20px 20px;
-      color: #9aab9a;
-      font-size: .72rem;
-      line-height: 1.9;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SEL 植．覺 - 自我覺察之旅</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Google Fonts: Noto Serif TC (營造質感) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Serif TC', serif;
+            background-color: #f5f5f4; /* stone-100 */
+        }
+        /* 隱藏預設的檔案上傳按鈕 */
+        input[type="file"] {
+            display: none;
+        }
+        /* 拍立得預覽的陰影效果 */
+        .polaroid-preview {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        textarea {
+            resize: none;
+        }
+    </style>
 </head>
-<body>
-<div class="app">
+<body class="text-stone-800 antialiased min-h-screen flex justify-center">
 
-  <header>
-    <span class="hbg hbg1">🌳</span>
-    <span class="hbg hbg2">🌿</span>
-    <h1>🌿 樹的心語</h1>
-    <p>與校園植物對話，探索內心世界</p>
-    <div class="sel-tags">
-      <span class="sel-tag">自我覺察</span>
-      <span class="sel-tag">自我管理</span>
-      <span class="sel-tag">SEL</span>
-    </div>
-  </header>
+    <div class="w-full max-w-md bg-stone-50 min-h-screen shadow-2xl relative pb-24">
+        
+        <!-- Header -->
+        <header class="bg-emerald-700 text-stone-50 p-5 rounded-b-2xl shadow-md z-10 relative">
+            <h1 class="text-2xl font-bold tracking-widest text-center flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                植．覺
+            </h1>
+            <p class="text-center text-emerald-100 text-sm mt-1 opacity-90">SEL 覺察與情緒管理</p>
+        </header>
 
-  <main>
+        <main class="p-5 space-y-6">
+            
+            <!-- 引導區塊 -->
+            <div class="bg-emerald-50/80 p-4 rounded-xl border border-emerald-100 text-sm leading-relaxed text-emerald-900 shadow-sm">
+                <p class="font-semibold mb-1 text-emerald-800">🌱 靜心引導：</p>
+                <p>深呼吸，觀察面前的樹或植物。它的姿態帶給你什麼感受？請拍下它，並寫下你想對它說的話，或是它給你的啟發。</p>
+            </div>
 
-    <!-- STEP 1 -->
-    <div class="card">
-      <div class="step-head">
-        <div class="badge">1</div>
-        <h2>拍下你的植物夥伴</h2>
-      </div>
+            <!-- 步驟 1: 上傳照片 -->
+            <div class="space-y-2">
+                <label class="block text-sm font-semibold text-stone-600">1. 拍下或上傳植物照片</label>
+                <label for="imageUpload" class="flex items-center justify-center gap-2 w-full bg-white border-2 border-dashed border-emerald-300 rounded-xl p-4 cursor-pointer hover:bg-emerald-50 transition-colors shadow-sm active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-600"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+                    <span id="uploadText" class="text-emerald-700 font-medium">開啟相機 / 相簿</span>
+                </label>
+                <!-- capture="environment" 預設開啟後置鏡頭 -->
+                <input type="file" id="imageUpload" accept="image/*" capture="environment">
+            </div>
 
-      <div id="uploadZone">
-        <input type="file" accept="image/*" id="photoInput" onchange="handlePhoto(event)">
-        <div class="upload-ph" id="uploadPh">
-          <span class="icon">📷</span>
-          <div class="main">點擊拍攝或選取照片</div>
-          <div class="hint">找一棵讓你有感覺的樹或植物</div>
+            <!-- 步驟 2: 書寫心靈小語 -->
+            <div class="space-y-2">
+                <label for="reflectionText" class="block text-sm font-semibold text-stone-600">2. 寫下你的心靈小語</label>
+                <textarea id="reflectionText" rows="3" class="w-full bg-white border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-emerald-400 focus:border-transparent outline-none shadow-sm transition-all text-stone-700 leading-relaxed placeholder:text-stone-400" placeholder="例如：看著你在風中搖曳，我也試著放鬆緊繃的肩膀..."></textarea>
+            </div>
+
+            <!-- 步驟 3: 預覽拍立得 -->
+            <div class="space-y-2 pt-2">
+                <label class="block text-sm font-semibold text-stone-600">3. 拍立得預覽</label>
+                <div class="flex justify-center w-full bg-stone-200 p-4 rounded-xl border border-stone-300 inset-shadow">
+                    <!-- Canvas 用於繪製並匯出圖片 -->
+                    <canvas id="polaroidCanvas" class="w-full max-w-[300px] h-auto bg-white polaroid-preview rounded-sm"></canvas>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- 底部懸浮下載按鈕 -->
+        <div class="fixed bottom-0 left-0 w-full flex justify-center pb-6 pt-4 px-5 bg-gradient-to-t from-stone-50 via-stone-50 to-transparent pointer-events-none">
+            <button id="downloadBtn" class="w-full max-w-md bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 transition-transform transform active:scale-95 pointer-events-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                儲存我的拍立得
+            </button>
         </div>
-        <img id="photoPreview" alt="植物照片">
-      </div>
 
-      <div class="photo-actions" id="photoActions">
-        <button class="btn-retake">
-          <input type="file" accept="image/*" id="photoInput2" onchange="handlePhoto(event)">
-          📷 重新選取照片
-        </button>
-      </div>
     </div>
 
-    <!-- STEP 2 -->
-    <div class="card">
-      <div class="step-head">
-        <div class="badge">2</div>
-        <h2>寫下你的心靈小語</h2>
-      </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const canvas = document.getElementById('polaroidCanvas');
+            const ctx = canvas.getContext('2d');
+            const imageUpload = document.getElementById('imageUpload');
+            const reflectionText = document.getElementById('reflectionText');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const uploadText = document.getElementById('uploadText');
 
-      <textarea
-        id="msgInput"
-        maxlength="50"
-        placeholder="此刻，這棵樹對你說了什麼？&#10;它讓你感受到什麼情緒？&#10;你想對它說什麼？"
-        oninput="onMsgInput()"
-      ></textarea>
+            let uploadedImage = null;
 
-      <div class="char-row">
-        <span class="char-hint">建議 15–45 字，效果最佳</span>
-        <span class="char-num"><span id="charNum">0</span> / 50</span>
-      </div>
+            // 設定 Canvas 實際像素大小 (高畫質輸出)
+            const CANVAS_WIDTH = 1080;
+            const CANVAS_HEIGHT = 1350; // 4:5 比例，標準 IG 或拍立得比例
+            
+            canvas.width = CANVAS_WIDTH;
+            canvas.height = CANVAS_HEIGHT;
 
-      <div class="prompt-sec">
-        <div class="prompt-label">✨ 靈感提示（點擊填入）</div>
-        <div class="chips">
-          <span class="chip" onclick="useChip(this)">靜靜站立，就是一種力量</span>
-          <span class="chip" onclick="useChip(this)">根往深處扎，心往遠處望</span>
-          <span class="chip" onclick="useChip(this)">每一片葉，都是一個選擇</span>
-          <span class="chip" onclick="useChip(this)">風來了，彎腰，但不折斷</span>
-          <span class="chip" onclick="useChip(this)">慢慢長，才能長得久</span>
-          <span class="chip" onclick="useChip(this)">我也可以，深根而後生長</span>
-        </div>
-      </div>
-    </div>
+            // 確保字體載入後再進行初始繪製
+            document.fonts.ready.then(() => {
+                renderCanvas();
+            });
 
-    <!-- STEP 3 -->
-    <div class="card">
-      <div class="step-head">
-        <div class="badge">3</div>
-        <h2>生成心語拍立得</h2>
-      </div>
-      <button class="btn-gen" id="genBtn" onclick="generate()">
-        🌿 生成心語拍立得
-      </button>
-    </div>
+            // 監聽圖片上傳
+            imageUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    uploadText.textContent = "重新選擇照片";
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const img = new Image();
+                        img.onload = function() {
+                            uploadedImage = img;
+                            renderCanvas();
+                        }
+                        img.src = event.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
 
-    <!-- OUTPUT -->
-    <div id="outputSec">
-      <div class="out-card">
-        <div class="out-title">✨ 你的心語拍立得</div>
-        <canvas id="polaroidCanvas"></canvas>
-        <div class="out-actions">
-          <button class="btn-dl" onclick="downloadImg()">💾 儲存到手機</button>
-          <div class="ios-tip" id="iosTip">
-            📱 iOS 用戶：請長按上方圖片，選擇「加入照片」即可儲存到相簿
-          </div>
-          <button class="btn-new" onclick="reset()">🔄 製作新的心語卡</button>
-        </div>
-      </div>
-    </div>
+            // 監聽文字輸入
+            reflectionText.addEventListener('input', renderCanvas);
 
-  </main>
+            // 處理多行文字自動換行的函數
+            function wrapText(context, text, x, y, maxWidth, lineHeight) {
+                // 將文字拆分成單字/單元
+                const characters = Array.from(text);
+                let line = '';
+                let currentY = y;
 
-  <footer>
-    SEL 師培研習 · 與自然對話，發現內在力量<br>
-    自我覺察 × 自我管理 🌱
-  </footer>
+                for (let n = 0; n < characters.length; n++) {
+                    // 處理使用者手動換行
+                    if (characters[n] === '\n') {
+                        context.fillText(line, x, currentY);
+                        line = '';
+                        currentY += lineHeight;
+                        continue;
+                    }
 
-</div>
+                    let testLine = line + characters[n];
+                    let metrics = context.measureText(testLine);
+                    let testWidth = metrics.width;
+                    
+                    if (testWidth > maxWidth && n > 0) {
+                        context.fillText(line, x, currentY);
+                        line = characters[n];
+                        currentY += lineHeight;
+                    } else {
+                        line = testLine;
+                    }
+                }
+                context.fillText(line, x, currentY);
+            }
 
-<script>
-  /* ── State ── */
-  let imgData = null;
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            // 繪製 Canvas 的主函數
+            function renderCanvas() {
+                // 1. 清除畫布並填滿白色背景（拍立得相紙）
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  /* ── Photo ── */
-  function handlePhoto(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      imgData = ev.target.result;
-      const prev = document.getElementById('photoPreview');
-      prev.src = imgData;
-      prev.style.display = 'block';
-      document.getElementById('uploadPh').style.display = 'none';
-      document.getElementById('photoActions').classList.add('show');
-    };
-    reader.readAsDataURL(file);
-    e.target.value = ''; // allow re-select same file
-  }
+                // 拍立得尺寸設定
+                const padding = 60; // 左右上邊距
+                const bottomAreaHeight = 350; // 下方留白給文字的空間
+                const photoWidth = CANVAS_WIDTH - (padding * 2);
+                const photoHeight = CANVAS_HEIGHT - padding - bottomAreaHeight;
 
-  /* ── Message ── */
-  function onMsgInput() {
-    document.getElementById('charNum').textContent =
-      document.getElementById('msgInput').value.length;
-  }
+                // 2. 繪製照片區域
+                if (uploadedImage) {
+                    // 計算 object-fit: cover 的縮放比例與位置
+                    const scale = Math.max(photoWidth / uploadedImage.width, photoHeight / uploadedImage.height);
+                    const drawWidth = uploadedImage.width * scale;
+                    const drawHeight = uploadedImage.height * scale;
+                    
+                    // 置中裁切
+                    const dx = padding + (photoWidth - drawWidth) / 2;
+                    const dy = padding + (photoHeight - drawHeight) / 2;
 
-  function useChip(el) {
-    const inp = document.getElementById('msgInput');
-    inp.value = el.textContent.trim();
-    onMsgInput();
-    inp.focus();
-  }
+                    ctx.save(); // 儲存狀態
+                    // 建立剪裁路徑 (限制圖片只畫在照片框內)
+                    ctx.beginPath();
+                    ctx.rect(padding, padding, photoWidth, photoHeight);
+                    ctx.clip();
+                    
+                    // 畫圖
+                    ctx.drawImage(uploadedImage, dx, dy, drawWidth, drawHeight);
+                    ctx.restore(); // 恢復狀態
+                } else {
+                    // 尚未上傳照片的佔位符
+                    ctx.fillStyle = '#E5E7EB'; // 灰色背景
+                    ctx.fillRect(padding, padding, photoWidth, photoHeight);
+                    
+                    ctx.fillStyle = '#9CA3AF';
+                    ctx.font = '36px "Noto Serif TC", serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('尚未選擇植物照片', CANVAS_WIDTH / 2, padding + photoHeight / 2);
+                }
 
-  /* ── Generate ── */
-  async function generate() {
-    if (!imgData) { alert('請先拍攝或選取植物照片 📷'); return; }
-    const msg = document.getElementById('msgInput').value.trim();
-    if (!msg)   { alert('請先寫下你的心靈小語 ✍️'); return; }
+                // 畫照片的內邊框（增加真實感）
+                ctx.strokeStyle = 'rgba(0,0,0,0.05)';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(padding, padding, photoWidth, photoHeight);
 
-    const btn = document.getElementById('genBtn');
-    btn.disabled = true;
-    btn.textContent = '生成中…';
+                // 3. 繪製文字
+                let userText = reflectionText.value.trim();
+                if (!userText) {
+                    userText = "與校園植物的對話...";
+                }
 
-    await document.fonts.ready;
+                ctx.fillStyle = '#292524'; // 深灰色字體 stone-800
+                ctx.font = '46px "Noto Serif TC", serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
 
-    try {
-      await buildPolaroid(imgData, msg);
-      const sec = document.getElementById('outputSec');
-      sec.classList.add('show');
-      sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      if (isIOS) document.getElementById('iosTip').classList.add('show');
-    } catch (err) {
-      console.error(err);
-      alert('生成失敗，請重試 😢');
-    }
+                const textMaxWidth = CANVAS_WIDTH - (padding * 3);
+                const lineHeight = 65;
+                const textStartX = CANVAS_WIDTH / 2;
+                const textStartY = padding + photoHeight + 70; // 照片下方
 
-    btn.disabled = false;
-    btn.textContent = '🌿 重新生成';
-  }
+                wrapText(ctx, userText, textStartX, textStartY, textMaxWidth, lineHeight);
+            }
 
-  /* ── Polaroid Canvas ── */
-  function buildPolaroid(src, message) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => {
-        /* ── Dimensions (display px then ×2 for retina) ── */
-        const S  = 2;              // device pixel ratio
-        const DW = 320;            // display width
-        const DP = 18;             // display padding (top / left / right)
-        const DPS = DW - DP * 2;  // display photo size (square)
-        const DBH = 148;           // display bottom height
-        const DH  = DP + DPS + DBH;
-
-        const canvas = document.getElementById('polaroidCanvas');
-        canvas.width  = DW * S;
-        canvas.height = DH * S;
-        canvas.style.width  = DW + 'px';
-        canvas.style.height = DH + 'px';
-
-        const ctx = canvas.getContext('2d');
-        const W = canvas.width, H = canvas.height;
-        const pad = DP * S, ps = DPS * S, bh = DBH * S;
-
-        /* Background */
-        ctx.fillStyle = '#fefcf8';
-        ctx.fillRect(0, 0, W, H);
-
-        /* Subtle warm gradient at bottom */
-        const bg2 = ctx.createLinearGradient(0, pad + ps, 0, H);
-        bg2.addColorStop(0, '#fefcf8');
-        bg2.addColorStop(1, '#fdf7ee');
-        ctx.fillStyle = bg2;
-        ctx.fillRect(0, pad + ps, W, bh);
-
-        /* Photo – square crop (cover) */
-        ctx.save();
-        rrect(ctx, pad, pad, ps, ps, 6 * S);
-        ctx.clip();
-        const { sx, sy, sw, sh } = coverCrop(img.width, img.height, ps, ps);
-        ctx.drawImage(img, sx, sy, sw, sh, pad, pad, ps, ps);
-        ctx.restore();
-
-        /* Photo vignette */
-        ctx.save();
-        rrect(ctx, pad, pad, ps, ps, 6 * S);
-        ctx.clip();
-        const vig = ctx.createRadialGradient(
-          pad + ps/2, pad + ps/2, ps * .28,
-          pad + ps/2, pad + ps/2, ps * .72
-        );
-        vig.addColorStop(0, 'transparent');
-        vig.addColorStop(1, 'rgba(0,0,0,.2)');
-        ctx.fillStyle = vig;
-        ctx.fillRect(pad, pad, ps, ps);
-        ctx.restore();
-
-        /* Thin separator */
-        ctx.strokeStyle = 'rgba(0,0,0,.05)';
-        ctx.lineWidth = S;
-        ctx.beginPath();
-        ctx.moveTo(pad, pad + ps + S);
-        ctx.lineTo(W - pad, pad + ps + S);
-        ctx.stroke();
-
-        /* ── Bottom text area ── */
-        const BY = pad + ps; // Y start of bottom
-
-        /* Leaf + date row */
-        ctx.font = `${17 * S}px serif`;
-        ctx.textAlign = 'left';
-        ctx.fillText('🌿', pad + 2, BY + 28 * S);
-
-        const today = new Date();
-        const ds = `${today.getFullYear()}.${z(today.getMonth()+1)}.${z(today.getDate())}`;
-        ctx.font = `${12 * S}px Georgia, serif`;
-        ctx.fillStyle = '#c4a882';
-        ctx.textAlign = 'right';
-        ctx.fillText(ds, W - pad, BY + 27 * S);
-
-        /* Message */
-        ctx.font = `${18 * S}px "Ma Shan Zheng", "Noto Serif TC", "PingFang TC", "Heiti TC", serif`;
-        ctx.fillStyle = '#3a2d1e';
-        ctx.textAlign = 'center';
-
-        const maxTW = ps - 16 * S;
-        const lh    = 27 * S;
-        let   ty    = BY + 62 * S;
-
-        wrapText(ctx, message, W / 2, ty, maxTW, lh);
-
-        resolve();
-      };
-      img.onerror = reject;
-      img.src = src;
-    });
-  }
-
-  /* ── Helpers ── */
-  function z(n) { return String(n).padStart(2, '0'); }
-
-  function coverCrop(iw, ih, tw, th) {
-    const ia = iw / ih, ta = tw / th;
-    let sx, sy, sw, sh;
-    if (ia > ta) { sh = ih; sw = ih * ta; sx = (iw - sw) / 2; sy = 0; }
-    else         { sw = iw; sh = iw / ta; sx = 0; sy = (ih - sh) / 2; }
-    return { sx, sy, sw, sh };
-  }
-
-  function rrect(ctx, x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
-    ctx.closePath();
-  }
-
-  function wrapText(ctx, text, cx, y, maxW, lh) {
-    const lines = text.split('\n');
-    let cy = y;
-    for (const line of lines) {
-      if (!line) { cy += lh * .5; continue; }
-      const chars = [...line];
-      let cur = '';
-      for (const ch of chars) {
-        const test = cur + ch;
-        if (ctx.measureText(test).width > maxW && cur) {
-          ctx.fillText(cur, cx, cy);
-          cur = ch; cy += lh;
-        } else { cur = test; }
-      }
-      if (cur) { ctx.fillText(cur, cx, cy); cy += lh; }
-    }
-  }
-
-  /* ── Download ── */
-  function downloadImg() {
-    const canvas = document.getElementById('polaroidCanvas');
-    if (isIOS) {
-      canvas.toBlob(blob => {
-        const url = URL.createObjectURL(blob);
-        window.open(url, '_blank');
-        setTimeout(() => URL.revokeObjectURL(url), 15000);
-      }, 'image/png');
-    } else {
-      const a = document.createElement('a');
-      a.download = `樹的心語_${new Date().toISOString().slice(0,10).replace(/-/g,'')}.png`;
-      a.href = canvas.toDataURL('image/png');
-      a.click();
-    }
-  }
-
-  /* ── Reset ── */
-  function reset() {
-    imgData = null;
-    const prev = document.getElementById('photoPreview');
-    prev.style.display = 'none'; prev.src = '';
-    document.getElementById('uploadPh').style.display = 'block';
-    document.getElementById('photoActions').classList.remove('show');
-    document.getElementById('photoInput').value = '';
-
-    document.getElementById('msgInput').value = '';
-    document.getElementById('charNum').textContent = '0';
-
-    document.getElementById('outputSec').classList.remove('show');
-    document.getElementById('genBtn').textContent = '🌿 生成心語拍立得';
-    document.getElementById('iosTip').classList.remove('show');
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-</script>
+            // 下載功能
+            downloadBtn.addEventListener('click', () => {
+                // 將 Canvas 轉換為圖片 URL
+                const dataURL = canvas.toDataURL('image/jpeg', 0.9);
+                
+                // 建立一個隱藏的 a 標籤來觸發下載
+                const link = document.createElement('a');
+                link.download = `SEL_植覺_${new Date().getTime()}.jpg`;
+                link.href = dataURL;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        });
+    </script>
 </body>
 </html>
