@@ -31,7 +31,7 @@
 </head>
 <body class="text-stone-800 antialiased min-h-screen flex justify-center">
 
-    <div class="w-full max-w-md bg-stone-50 min-h-screen shadow-2xl relative pb-24">
+    <div class="w-full max-w-md bg-stone-50 min-h-screen shadow-2xl relative pb-28">
         
         <!-- Header -->
         <header class="bg-emerald-700 text-stone-50 p-5 rounded-b-2xl shadow-md z-10 relative">
@@ -79,10 +79,12 @@
         </main>
 
         <!-- 底部懸浮下載按鈕 -->
-        <div class="fixed bottom-0 left-0 w-full flex justify-center pb-6 pt-4 px-5 bg-gradient-to-t from-stone-50 via-stone-50 to-transparent pointer-events-none">
+        <div class="fixed bottom-0 left-0 w-full flex flex-col items-center pb-6 pt-2 px-5 bg-gradient-to-t from-stone-50 via-stone-50 to-transparent pointer-events-none">
+            <!-- 增加小提示，引導使用者使用系統選單存圖 -->
+            <p class="text-xs text-stone-600 mb-2 drop-shadow-sm font-medium bg-stone-50/80 px-3 py-1 rounded-full">💡 點擊後請在選單選擇「儲存影像」</p>
             <button id="downloadBtn" class="w-full max-w-md bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 transition-transform transform active:scale-95 pointer-events-auto">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-                儲存我的拍立得
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                儲存到手機相簿
             </button>
         </div>
 
@@ -231,18 +233,39 @@
                 wrapText(ctx, userText, textStartX, textStartY, textMaxWidth, lineHeight);
             }
 
-            // 下載功能
-            downloadBtn.addEventListener('click', () => {
-                // 將 Canvas 轉換為圖片 URL
-                const dataURL = canvas.toDataURL('image/jpeg', 0.9);
-                
-                // 建立一個隱藏的 a 標籤來觸發下載
-                const link = document.createElement('a');
-                link.download = `SEL_植覺_${new Date().getTime()}.jpg`;
-                link.href = dataURL;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+            // 下載與分享功能
+            downloadBtn.addEventListener('click', async () => {
+                try {
+                    const fileName = `SEL_植覺_${new Date().getTime()}.jpg`;
+                    
+                    // 將 Canvas 轉換為 Blob 物件
+                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+                    if (!blob) return;
+
+                    const file = new File([blob], fileName, { type: 'image/jpeg' });
+
+                    // 檢查瀏覽器是否支援 Web Share API，並且支援分享檔案
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        // 喚起手機原生分享選單
+                        await navigator.share({
+                            files: [file],
+                            title: 'SEL 植．覺',
+                            text: '我的植物對話紀錄'
+                        });
+                    } else {
+                        // 如果是在不支援分享的環境（如舊版瀏覽器或部分電腦版），退回傳統下載方式
+                        const dataURL = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.download = fileName;
+                        link.href = dataURL;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(dataURL);
+                    }
+                } catch (error) {
+                    console.error('儲存或分享時發生取消或錯誤:', error);
+                }
             });
         });
     </script>
