@@ -4,147 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SEL 植．覺 - 自我覺察之旅</title>
+    <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Google Fonts: Noto Serif TC (營造質感) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@700;900&family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
-        :root {
-            --color-teal: #2a9d8f;      /* 附圖深青 */
-            --color-sage: #8ec3b0;      /* 附圖淺綠 */
-            --color-yellow: #e9c46a;    /* 附圖黃色 */
-            --color-beige: #f4f1de;     /* 附圖米色 */
-            --brutal-black: #000000;
-        }
-
         body {
             font-family: 'Noto Serif TC', serif;
-            background-color: var(--color-beige);
-            color: var(--brutal-black);
+            background-color: #f5f5f4; /* stone-100 */
         }
-
-        h1, .brutal-font {
-            font-family: 'Noto Sans TC', sans-serif;
-            font-weight: 900;
-        }
-
-        /* Neubrutalism 核心樣式 */
-        .brutal-card {
-            background-color: #ffffff;
-            border: 4px solid var(--brutal-black);
-            box-shadow: 8px 8px 0px 0px var(--brutal-black);
-            border-radius: 1.5rem;
-            transition: all 0.1s ease;
-        }
-
-        .brutal-btn {
-            background-color: var(--color-yellow);
-            color: var(--brutal-black);
-            border: 4px solid var(--brutal-black);
-            box-shadow: 6px 6px 0px 0px var(--brutal-black);
-            font-family: 'Noto Sans TC', sans-serif;
-            font-weight: 700;
-            border-radius: 1rem;
-        }
-
-        .brutal-btn:active {
-            transform: translate(4px, 4px);
-            box-shadow: 2px 2px 0px 0px var(--brutal-black);
-        }
-
-        .brutal-input {
-            border: 4px solid var(--brutal-black) !important;
-            border-radius: 1rem !important;
-        }
-
+        /* 隱藏預設的檔案上傳按鈕 */
         input[type="file"] {
             display: none;
         }
-
+        /* 拍立得預覽的陰影效果 */
+        .polaroid-preview {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
         textarea {
             resize: none;
         }
-
-        /* 畫布樣式 */
-        #polaroidCanvas {
-            border: 4px solid var(--brutal-black);
-            box-shadow: 12px 12px 0px 0px var(--brutal-black);
-            border-radius: 4px;
-        }
     </style>
 </head>
-<body class="antialiased min-h-screen flex justify-center p-4">
+<body class="text-stone-800 antialiased min-h-screen flex justify-center">
 
-    <div class="w-full max-w-md bg-[#FAF9F6] min-h-screen border-[6px] border-black rounded-[2.5rem] overflow-hidden relative pb-32 mb-10 shadow-2xl">
+    <div class="w-full max-w-md bg-stone-50 min-h-screen shadow-2xl relative pb-28">
         
-        <!-- Header: 使用深青色作為主背景 -->
-        <header class="bg-[#2a9d8f] text-black p-8 border-b-[6px] border-black">
-            <div class="flex flex-col items-center gap-2">
-                <!-- SVG 使用米色強調 -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#f4f1de" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
-                <h1 class="text-4xl uppercase tracking-widest mt-2 text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">植．覺</h1>
-                <div class="h-1.5 w-16 bg-[#e9c46a] rounded-full"></div>
-            </div>
+        <!-- Header -->
+        <header class="bg-emerald-700 text-stone-50 p-5 rounded-b-2xl shadow-md z-10 relative">
+            <h1 class="text-2xl font-bold tracking-widest text-center flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                植．覺
+            </h1>
+            <p class="text-center text-emerald-100 text-sm mt-1 opacity-90">SEL 覺察與情緒管理</p>
         </header>
 
-        <main class="p-6 space-y-8">
+        <main class="p-5 space-y-6">
             
-            <!-- 引導區塊: 使用深青色裝飾線 -->
-            <div class="brutal-card p-6 bg-white">
-                <div class="flex items-center gap-2 mb-3">
-                    <span class="brutal-font text-xl underline decoration-4 decoration-[#e9c46a]">靜心引導</span>
-                </div>
-                <p class="text-base leading-relaxed text-stone-700">
-                    緩緩深呼吸，觀察周遭的植物。它正以什麼樣的姿態與你共處？請捕捉它的身影，並與它進行一場內心的對話。
-                </p>
+            <!-- 引導區塊 -->
+            <div class="bg-emerald-50/80 p-4 rounded-xl border border-emerald-100 text-sm leading-relaxed text-emerald-900 shadow-sm">
+                <p class="font-semibold mb-1 text-emerald-800">🌱 靜心引導：</p>
+                <p>深呼吸，觀察面前的樹或植物。它的姿態帶給你什麼感受？請拍下它，並寫下你想對它說的話，或是它給你的啟發。</p>
             </div>
 
-            <!-- 步驟說明與操作 -->
-            <div class="space-y-8">
-                <!-- 步驟 1 -->
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between">
-                        <label class="brutal-font text-xs uppercase bg-black text-white px-3 py-1 rounded-full">STEP 01</label>
-                        <span class="brutal-font text-sm text-stone-500">捕捉綠意</span>
-                    </div>
-                    <label for="imageUpload" class="brutal-btn flex items-center justify-center gap-3 w-full p-6 cursor-pointer text-xl group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-                        <span id="uploadText">點擊開啟相機</span>
-                    </label>
-                    <input type="file" id="imageUpload" accept="image/*" capture="environment">
-                </div>
+            <!-- 步驟 1: 上傳照片 -->
+            <div class="space-y-2">
+                <label class="block text-sm font-semibold text-stone-600">1. 拍下或上傳植物照片</label>
+                <label for="imageUpload" class="flex items-center justify-center gap-2 w-full bg-white border-2 border-dashed border-emerald-300 rounded-xl p-4 cursor-pointer hover:bg-emerald-50 transition-colors shadow-sm active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-600"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+                    <span id="uploadText" class="text-emerald-700 font-medium">開啟相機 / 相簿</span>
+                </label>
+                <!-- capture="environment" 預設開啟後置鏡頭 -->
+                <input type="file" id="imageUpload" accept="image/*" capture="environment">
+            </div>
 
-                <!-- 步驟 2 -->
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between">
-                        <label class="brutal-font text-xs uppercase bg-black text-white px-3 py-1 rounded-full">STEP 02</label>
-                        <span class="brutal-font text-sm text-stone-500">書寫心語</span>
-                    </div>
-                    <textarea id="reflectionText" rows="4" class="brutal-input w-full bg-white p-5 outline-none text-lg leading-relaxed placeholder:text-stone-300 focus:bg-[#8ec3b0]/10 transition-colors" placeholder="此時此刻，你想對它說什麼..."></textarea>
-                </div>
+            <!-- 步驟 2: 書寫心靈小語 -->
+            <div class="space-y-2">
+                <label for="reflectionText" class="block text-sm font-semibold text-stone-600">2. 寫下你的心靈小語</label>
+                <textarea id="reflectionText" rows="3" class="w-full bg-white border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-emerald-400 focus:border-transparent outline-none shadow-sm transition-all text-stone-700 leading-relaxed placeholder:text-stone-400" placeholder="例如：看著你在風中搖曳，我也試著放鬆緊繃的肩膀..."></textarea>
+            </div>
 
-                <!-- 成果預覽 -->
-                <div class="space-y-6 pt-4 pb-10">
-                    <div class="flex flex-col items-center gap-2">
-                        <div class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-stone-400"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-                            <label class="brutal-font text-sm uppercase text-stone-400">成果預覽</label>
-                        </div>
-                        <div class="flex justify-center w-full mt-4">
-                            <canvas id="polaroidCanvas" class="w-full max-w-[280px] h-auto bg-white"></canvas>
-                        </div>
-                    </div>
+            <!-- 步驟 3: 預覽拍立得 -->
+            <div class="space-y-2 pt-2">
+                <label class="block text-sm font-semibold text-stone-600">3. 拍立得預覽</label>
+                <div class="flex justify-center w-full bg-stone-200 p-4 rounded-xl border border-stone-300 inset-shadow">
+                    <!-- Canvas 用於繪製並匯出圖片 -->
+                    <canvas id="polaroidCanvas" class="w-full max-w-[300px] h-auto bg-white polaroid-preview rounded-sm"></canvas>
                 </div>
             </div>
 
         </main>
 
-        <!-- 底部懸浮按鈕: 使用黑色背景營造強烈對比 -->
-        <div class="fixed bottom-0 left-0 w-full flex flex-col items-center pb-8 pt-4 px-8 pointer-events-none">
-            <button id="downloadBtn" class="w-full max-w-md brutal-btn bg-black text-white py-5 px-6 text-xl flex items-center justify-center gap-3 pointer-events-auto rounded-[1.5rem]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e9c46a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                儲存這份覺察
+        <!-- 底部懸浮下載按鈕 -->
+        <div class="fixed bottom-0 left-0 w-full flex flex-col items-center pb-6 pt-2 px-5 bg-gradient-to-t from-stone-50 via-stone-50 to-transparent pointer-events-none">
+            <!-- 增加小提示，引導使用者使用系統選單存圖 -->
+            <p class="text-xs text-stone-600 mb-2 drop-shadow-sm font-medium bg-stone-50/80 px-3 py-1 rounded-full">💡 點擊後請在選單選擇「儲存影像」</p>
+            <button id="downloadBtn" class="w-full max-w-md bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 transition-transform transform active:scale-95 pointer-events-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                儲存到手機相簿
             </button>
         </div>
 
@@ -161,20 +101,23 @@
 
             let uploadedImage = null;
 
+            // 設定 Canvas 實際像素大小 (高畫質輸出)
             const CANVAS_WIDTH = 1080;
-            const CANVAS_HEIGHT = 1350; 
+            const CANVAS_HEIGHT = 1350; // 4:5 比例，標準 IG 或拍立得比例
             
             canvas.width = CANVAS_WIDTH;
             canvas.height = CANVAS_HEIGHT;
 
+            // 確保字體載入後再進行初始繪製
             document.fonts.ready.then(() => {
                 renderCanvas();
             });
 
+            // 監聽圖片上傳
             imageUpload.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
-                    uploadText.textContent = "更換植物照片";
+                    uploadText.textContent = "重新選擇照片";
                     const reader = new FileReader();
                     reader.onload = function(event) {
                         const img = new Image();
@@ -188,23 +131,30 @@
                 }
             });
 
+            // 監聽文字輸入
             reflectionText.addEventListener('input', renderCanvas);
 
+            // 處理多行文字自動換行的函數
             function wrapText(context, text, x, y, maxWidth, lineHeight) {
+                // 將文字拆分成單字/單元
                 const characters = Array.from(text);
                 let line = '';
                 let currentY = y;
 
                 for (let n = 0; n < characters.length; n++) {
+                    // 處理使用者手動換行
                     if (characters[n] === '\n') {
                         context.fillText(line, x, currentY);
                         line = '';
                         currentY += lineHeight;
                         continue;
                     }
+
                     let testLine = line + characters[n];
                     let metrics = context.measureText(testLine);
-                    if (metrics.width > maxWidth && n > 0) {
+                    let testWidth = metrics.width;
+                    
+                    if (testWidth > maxWidth && n > 0) {
                         context.fillText(line, x, currentY);
                         line = characters[n];
                         currentY += lineHeight;
@@ -215,84 +165,132 @@
                 context.fillText(line, x, currentY);
             }
 
+            // 繪製 Canvas 的主函數
             function renderCanvas() {
+                // 1. 清除畫布並填滿白色背景（拍立得相紙）
                 ctx.fillStyle = '#FFFFFF';
                 ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-                const padding = 70; 
-                const bottomAreaHeight = 380; 
+                // 拍立得尺寸設定
+                const padding = 60; // 左右上邊距
+                const bottomAreaHeight = 350; // 下方留白給文字的空間
                 const photoWidth = CANVAS_WIDTH - (padding * 2);
                 const photoHeight = CANVAS_HEIGHT - padding - bottomAreaHeight;
 
+                // 2. 繪製照片區域
                 if (uploadedImage) {
+                    // 計算 object-fit: cover 的縮放比例與位置
                     const scale = Math.max(photoWidth / uploadedImage.width, photoHeight / uploadedImage.height);
                     const drawWidth = uploadedImage.width * scale;
                     const drawHeight = uploadedImage.height * scale;
+                    
+                    // 置中裁切
                     const dx = padding + (photoWidth - drawWidth) / 2;
                     const dy = padding + (photoHeight - drawHeight) / 2;
 
-                    ctx.save();
+                    ctx.save(); // 儲存狀態
+                    // 建立剪裁路徑 (限制圖片只畫在照片框內)
                     ctx.beginPath();
                     ctx.rect(padding, padding, photoWidth, photoHeight);
                     ctx.clip();
+                    
+                    // 畫圖
                     ctx.drawImage(uploadedImage, dx, dy, drawWidth, drawHeight);
-                    ctx.restore();
+                    ctx.restore(); // 恢復狀態
                 } else {
-                    ctx.fillStyle = '#f3f4f6'; 
+                    // 尚未上傳照片的佔位符
+                    ctx.fillStyle = '#E5E7EB'; // 灰色背景
                     ctx.fillRect(padding, padding, photoWidth, photoHeight);
-                    ctx.fillStyle = '#000000';
-                    ctx.font = 'bold 42px "Noto Sans TC", sans-serif';
+                    
+                    ctx.fillStyle = '#9CA3AF';
+                    ctx.font = '36px "Noto Serif TC", serif';
                     ctx.textAlign = 'center';
-                    ctx.fillText('等待捕捉綠意...', CANVAS_WIDTH / 2, padding + photoHeight / 2);
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('尚未選擇植物照片', CANVAS_WIDTH / 2, padding + photoHeight / 2);
                 }
 
-                ctx.strokeStyle = '#000000';
-                ctx.lineWidth = 12;
+                // 畫照片的內邊框（增加真實感）
+                ctx.strokeStyle = 'rgba(0,0,0,0.05)';
+                ctx.lineWidth = 2;
                 ctx.strokeRect(padding, padding, photoWidth, photoHeight);
 
-                let userText = reflectionText.value.trim() || "在此寫下覺察內容...";
-                
-                let fontSize = 48;
-                let lineHeight = 72;
-                const textLength = userText.length;
-                if (textLength <= 15) { fontSize = 68; lineHeight = 98; }
-                else if (textLength > 60) { fontSize = 36; lineHeight = 56; }
+                // 3. 繪製文字
+                let userText = reflectionText.value.trim();
+                if (!userText) {
+                    userText = "與校園植物的對話...";
+                }
 
-                ctx.fillStyle = '#000000'; 
-                ctx.font = `600 ${fontSize}px "Noto Serif TC", serif`;
+                // 動態判斷字體大小與行高
+                let fontSize = 46;
+                let lineHeight = 65;
+                const textLength = userText.length;
+
+                if (textLength <= 15) {
+                    fontSize = 64;       // 15 字以內超大字體 (例如單句金句)
+                    lineHeight = 85;
+                } else if (textLength <= 30) {
+                    fontSize = 54;       // 15~30 字大字體
+                    lineHeight = 75;
+                } else if (textLength <= 60) {
+                    fontSize = 44;       // 30~60 字標準字體
+                    lineHeight = 62;
+                } else if (textLength <= 100) {
+                    fontSize = 36;       // 60~100 字縮小字體
+                    lineHeight = 52;
+                } else {
+                    fontSize = 30;       // 100 字以上更小字體以容納內容
+                    lineHeight = 44;
+                }
+
+                ctx.fillStyle = '#292524'; // 深灰色字體 stone-800
+                ctx.font = `${fontSize}px "Noto Serif TC", serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'top';
 
-                const textMaxWidth = CANVAS_WIDTH - (padding * 3.5);
+                const textMaxWidth = CANVAS_WIDTH - (padding * 3);
                 const textStartX = CANVAS_WIDTH / 2;
-                const textStartY = padding + photoHeight + 85;
+                const textStartY = padding + photoHeight + 70; // 照片下方
 
                 wrapText(ctx, userText, textStartX, textStartY, textMaxWidth, lineHeight);
-                
-                // 裝飾性標記: 使用最新色票中的黃色
-                ctx.fillStyle = '#e9c46a';
-                ctx.beginPath();
-                ctx.arc(CANVAS_WIDTH/2, CANVAS_HEIGHT - 65, 10, 0, Math.PI * 2);
-                ctx.fill();
             }
 
+            // 下載與分享功能
             downloadBtn.addEventListener('click', async () => {
                 try {
-                    const fileName = `SEL_PlantSense_${Date.now()}.jpg`;
-                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
+                    const fileName = `SEL_植覺_${new Date().getTime()}.jpg`;
+                    
+                    // 將 Canvas 轉換為 Blob 物件
+                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+                    if (!blob) return;
+
                     const file = new File([blob], fileName, { type: 'image/jpeg' });
 
+                    // 檢查瀏覽器是否支援 Web Share API，並且支援分享檔案
                     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                        await navigator.share({ files: [file], title: '植．覺 自我覺察' });
+                        // 喚起手機原生分享選單
+                        await navigator.share({
+                            files: [file],
+                            title: 'SEL 植．覺',
+                            text: '我的植物對話紀錄'
+                        });
                     } else {
+                        // 如果是在不支援分享的環境（如舊版瀏覽器或部分電腦版），退回傳統下載方式
+                        const dataURL = URL.createObjectURL(blob);
                         const link = document.createElement('a');
                         link.download = fileName;
-                        link.href = URL.createObjectURL(blob);
+                        link.href = dataURL;
+                        document.body.appendChild(link);
                         link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(dataURL);
                     }
-                } catch (e) { console.error(e); }
+                } catch (error) {
+                    console.error('儲存或分享時發生取消或錯誤:', error);
+                }
             });
         });
     </script>
 </body>
 </html>
+
+
